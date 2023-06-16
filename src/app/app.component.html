@@ -1,0 +1,9 @@
+<span>{{config$ | async | json}}</span>
+<div>
+  <input type="checkbox" id="state1" (change)="updateState1($event)" [checked]="(config$ | async)?.state1">
+  <label for="state1">State1</label>
+</div>
+<div>
+  <input type="checkbox" id="state2" (change)="updateState2($event)" [checked]="(config$ | async)?.state2">
+  <label for="state2">State2</label>
+</div>
