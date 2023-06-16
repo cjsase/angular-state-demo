@@ -10,7 +10,7 @@ import {Observable} from "rxjs";
 export class AppComponent {
   protected config$: Observable<Config>
   constructor(private service: AppService) {
-    this.config$ = this.service.getConfig()
+    this.config$ = this.service.getConfig$()
   }
 
   updateState1(event: Event) {

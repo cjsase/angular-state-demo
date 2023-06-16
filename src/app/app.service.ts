@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 
 export interface Config {
   state1: boolean;
@@ -14,19 +14,24 @@ const defaultConfig: Config = {
 @Injectable({providedIn: 'root'})
 export class AppService {
   private storageKey = 'config'
-  private config$
+  private config$: BehaviorSubject<Config>
 
   constructor() {
     const savedConfig = sessionStorage.getItem(this.storageKey)
     this.config$ = new BehaviorSubject<Config>(savedConfig ? JSON.parse(savedConfig) : defaultConfig)
   }
 
-  getConfig() {
+  getConfig$(): Observable<Config> {
     return this.config$.asObservable()
   }
 
-  updateConfig(config: Partial<Config>) {
-    this.config$.next({...this.config$.getValue(), ...config})
-    sessionStorage.setItem(this.storageKey, JSON.stringify(this.config$.getValue()))
+  getConfig(): Config {
+    return this.config$.getValue()
+  }
+
+  updateConfig(config: Partial<Config>): Config {
+    this.config$.next({...this.getConfig(), ...config})
+    sessionStorage.setItem(this.storageKey, JSON.stringify(this.getConfig()))
+    return this.getConfig()
   }
 }
